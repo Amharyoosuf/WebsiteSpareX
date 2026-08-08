@@ -1,0 +1,120 @@
+// Colombo Spares data model.
+//
+// Local dev + this build use SQLite (zero-setup, fast enough for a shop).
+// To move to Postgres on Railway: change `provider` to "postgresql" and point
+// DATABASE_URL at the Railway Postgres URL, then run `prisma migrate deploy`.
+// The app code avoids DB-specific features so the switch is a one-liner.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Product {
+  id             String           @id @default(cuid())
+  name           String
+  slug           String           @unique
+  description    String           @default("")
+  isOnOffer      Boolean          @default(false)
+  isHidden       Boolean          @default(false)
+  seoTitle       String?
+  seoDescription String?
+  categoryId     String?
+  category       Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  images         ProductImage[]
+  variants       ProductVariant[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([categoryId])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String
+  sortOrder Int     @default(0)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+// A "model" of a main product, e.g. 60W / 80W of a Fan Motor.
+model ProductVariant {
+  id        String  @id @default(cuid())
+  name      String
+  price     Int // stored in whole rupees
+  salePrice Int?
+  inStock   Boolean @default(true)
+  imageUrl  String? // optional per-model image override
+  sku       String?
+  sortOrder Int     @default(0)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  customerName  String
+  address       String
+  phone1        String
+  phone2        String?
+  paymentMethod String // "COD" | "BANK_DEPOSIT"
+  depositSlipUrl String?
+  subtotal      Int
+  deliveryFee   Int         @default(500)
+  total         Int
+  status        String      @default("PENDING") // PENDING | CONFIRMED | DELIVERED | CANCELLED
+  items         OrderItem[]
+  createdAt     DateTime    @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id          String @id @default(cuid())
+  orderId     String
+  order       Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String?
+  variantId   String?
+  productName String
+  variantName String
+  unitPrice   Int
+  qty         Int
+  lineTotal   Int
+
+  @@index([orderId])
+}
+
+// Single-row business settings.
+model Settings {
+  id                String  @id @default("singleton")
+  shopName          String  @default("SpareX")
+  shopAddress       String  @default("")
+  phone1            String  @default("")
+  phone2            String  @default("")
+  email             String  @default("")
+  bankName          String  @default("")
+  bankAccountName   String  @default("")
+  bankAccountNumber String  @default("")
+  bankBranch        String  @default("")
+  deliveryFee       Int     @default(500)
+  openaiApiKey      String  @default("")
+}

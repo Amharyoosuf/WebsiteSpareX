@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600" role="img" aria-label="Spare part">
+  <rect width="600" height="600" fill="#f4f6f9"/>
+  <g fill="none" stroke="#c3ccd8" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="300" cy="300" r="86"/>
+    <circle cx="300" cy="300" r="30" fill="#c3ccd8" stroke="none"/>
+    <g>
+      <path d="M300 150 v40"/><path d="M300 410 v40"/>
+      <path d="M150 300 h40"/><path d="M410 300 h40"/>
+      <path d="M193 193 l28 28"/><path d="M379 379 l28 28"/>
+      <path d="M407 193 l-28 28"/><path d="M221 379 l-28 28"/>
+    </g>
+  </g>
+  <text x="300" y="520" text-anchor="middle" font-family="system-ui, sans-serif" font-size="36" fill="#9aa5b4">SpareX</text>
+</svg>
