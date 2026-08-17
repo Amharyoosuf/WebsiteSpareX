@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { isAdmin } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
 import { slugify } from "@/lib/util";
+import { isUploadedFile } from "@/lib/storage";
 import { enrichCsvRows, generateSeo, type CsvRow } from "@/lib/ai";
 
 export type ImportResult =
@@ -43,7 +44,7 @@ export async function importCsv(formData: FormData): Promise<ImportResult> {
 
   const file = formData.get("file");
   const useAi = formData.get("useAi") === "on";
-  if (!(file instanceof File) || file.size === 0) {
+  if (!isUploadedFile(file) || file.size === 0) {
     return { ok: false, error: "Please choose a CSV file." };
   }
 

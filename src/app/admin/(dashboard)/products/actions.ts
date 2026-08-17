@@ -6,7 +6,7 @@ import { prisma } from "@/lib/db";
 import { isAdmin } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
 import { slugify } from "@/lib/util";
-import { uploadFormFile } from "@/lib/storage";
+import { uploadFormFile, isUploadedFile } from "@/lib/storage";
 import { generateSeo } from "@/lib/ai";
 
 async function ensureAdmin() {
@@ -91,7 +91,7 @@ export async function saveProduct(formData: FormData) {
     const v = variants[i];
     const file = formData.get(`variantImage_${v.rowKey}`);
     let imageUrl = v.imageUrl || null;
-    if (file instanceof File && file.size > 0) {
+    if (isUploadedFile(file) && file.size > 0) {
       imageUrl = await uploadFormFile(file, "products");
     }
     const price = Math.max(0, Math.round(Number(v.price) || 0));
@@ -108,7 +108,7 @@ export async function saveProduct(formData: FormData) {
   }
 
   // New gallery image uploads.
-  const newImageFiles = formData.getAll("images").filter((f): f is File => f instanceof File && f.size > 0);
+  const newImageFiles = formData.getAll("images").filter((f): f is File => isUploadedFile(f) && f.size > 0);
   const newImageUrls: string[] = [];
   for (const f of newImageFiles) {
     const url = await uploadFormFile(f, "products");

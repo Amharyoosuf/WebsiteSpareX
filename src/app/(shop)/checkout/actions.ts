@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
-import { uploadFormFile } from "@/lib/storage";
+import { uploadFormFile, isUploadedFile } from "@/lib/storage";
 import { orderNumber as makeOrderNumber } from "@/lib/util";
 import { effectivePrice } from "@/lib/products";
 import type { PaymentMethod } from "@/lib/constants";
@@ -84,7 +84,7 @@ export async function createOrder(formData: FormData): Promise<CheckoutResult> {
   let depositSlipUrl: string | null = null;
   if (paymentMethod === "BANK_DEPOSIT") {
     const slip = formData.get("slip");
-    if (slip instanceof File && slip.size > 0) {
+    if (isUploadedFile(slip) && slip.size > 0) {
       try {
         depositSlipUrl = await uploadFormFile(slip, "slips");
       } catch {

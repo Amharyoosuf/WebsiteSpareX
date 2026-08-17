@@ -17,6 +17,18 @@ export function isR2Configured(): boolean {
   );
 }
 
+// Detect an uploaded file by shape rather than `instanceof File`. The `File`
+// global isn't defined on older Node runtimes (e.g. Node 18 on some hosts),
+// so `x instanceof File` throws there. Duck-typing works on every version.
+export function isUploadedFile(value: unknown): value is File {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as { arrayBuffer?: unknown }).arrayBuffer === "function" &&
+    typeof (value as { size?: unknown }).size === "number"
+  );
+}
+
 function safeExt(filename: string, contentType: string): string {
   const fromName = path.extname(filename || "").toLowerCase().replace(/[^.a-z0-9]/g, "");
   if (fromName) return fromName;
