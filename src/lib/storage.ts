@@ -3,12 +3,22 @@ import crypto from "crypto";
 import fs from "fs/promises";
 import path from "path";
 
+// Accept a bare account id OR a full S3 endpoint pasted by mistake
+// (e.g. "https://<id>.r2.cloudflarestorage.com") and reduce it to just the id.
+function cleanAccountId(raw: string): string {
+  return (raw || "")
+    .trim()
+    .replace(/^https?:\/\//i, "")
+    .replace(/\.r2\.cloudflarestorage\.com.*$/i, "")
+    .replace(/\/.*$/, "");
+}
+
 const R2 = {
-  accountId: process.env.R2_ACCOUNT_ID || "",
-  accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
-  secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
-  bucket: process.env.R2_BUCKET || "",
-  publicUrl: (process.env.R2_PUBLIC_URL || "").replace(/\/$/, ""),
+  accountId: cleanAccountId(process.env.R2_ACCOUNT_ID || ""),
+  accessKeyId: (process.env.R2_ACCESS_KEY_ID || "").trim(),
+  secretAccessKey: (process.env.R2_SECRET_ACCESS_KEY || "").trim(),
+  bucket: (process.env.R2_BUCKET || "").trim(),
+  publicUrl: (process.env.R2_PUBLIC_URL || "").trim().replace(/\/$/, ""),
 };
 
 export function isR2Configured(): boolean {
@@ -68,6 +78,7 @@ export async function uploadFile(
     const client = new S3Client({
       region: "auto",
       endpoint: `https://${R2.accountId}.r2.cloudflarestorage.com`,
+      forcePathStyle: true, // R2: address the bucket via the path, not the hostname
       credentials: {
         accessKeyId: R2.accessKeyId,
         secretAccessKey: R2.secretAccessKey,
