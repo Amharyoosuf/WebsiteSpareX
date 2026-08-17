@@ -127,20 +127,22 @@ export function ProductForm({
   );
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    const validRows = rows.filter((r) => r.name.trim() !== "");
     if (!name.trim()) {
       e.preventDefault();
       setFormError("Enter a product name.");
       return;
     }
-    if (validRows.length === 0) {
+    // A product needs at least one priced row. The model name is optional —
+    // a single priced row with no name is just a simple one-price product.
+    const priced = rows.filter((r) => r.price !== "" && Number(r.price) > 0);
+    if (priced.length === 0) {
       e.preventDefault();
-      setFormError("Add at least one model with a name and price.");
+      setFormError("Enter a price.");
       return;
     }
-    if (validRows.some((r) => !r.price || Number(r.price) <= 0)) {
+    if (priced.length > 1 && priced.some((r) => r.name.trim() === "")) {
       e.preventDefault();
-      setFormError("Every model needs a price greater than 0.");
+      setFormError("When a product has more than one model, give each model a name.");
       return;
     }
     setFormError(null);
@@ -230,29 +232,30 @@ export function ProductForm({
         {/* Models / variants */}
         <section className="card p-4 sm:p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-base font-bold text-ink">Models</h2>
+            <h2 className="text-base font-bold text-ink">Price &amp; models</h2>
             <button type="button" className="btn-outline" onClick={() => setRows((r) => [...r, blankRow(crypto.randomUUID())])}>
               + Add model
             </button>
           </div>
           <p className="mb-4 text-sm text-muted">
-            Each model (e.g. 60W, 80W) has its own price and stock. Sale price is optional.
+            Just one price? Fill in <b>Price</b> and leave the model name blank. Comes in options
+            (e.g. 60W, 80W)? Give each a model name and click <b>+ Add model</b> for more.
           </p>
           <div className="space-y-4">
             {rows.map((row) => (
               <div key={row.rowKey} className="rounded-lg border border-line p-3 sm:p-4">
                 <div className="grid gap-3 sm:grid-cols-12">
                   <div className="sm:col-span-4">
-                    <label className="label">Model name</label>
+                    <label className="label">Model name <span className="font-normal text-muted">(optional)</span></label>
                     <input
                       className="input"
-                      placeholder="e.g. 60W"
+                      placeholder="e.g. 60W — leave blank if one price"
                       value={row.name}
                       onChange={(e) => updateRow(row.rowKey, { name: e.target.value })}
                     />
                   </div>
                   <div className="sm:col-span-3">
-                    <label className="label">Price (Rs)</label>
+                    <label className="label">Price (Rs) *</label>
                     <input
                       className="input"
                       type="number"

@@ -42,7 +42,7 @@ export function CartView({ deliveryFee }: { deliveryFee: number }) {
                 <Link href={`/product/${it.productSlug}`} className="font-semibold text-ink hover:text-brand">
                   {it.productName}
                 </Link>
-                <p className="text-sm text-muted">Model: {it.variantName}</p>
+                {it.variantName && <p className="text-sm text-muted">Model: {it.variantName}</p>}
                 <p className="mt-1 text-sm font-medium text-ink">{formatLKR(it.unitPrice)}</p>
                 <div className="mt-2 flex items-center gap-3">
                   <div className="inline-flex items-center rounded-lg border border-line">

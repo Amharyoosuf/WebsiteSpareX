@@ -101,12 +101,10 @@ export function ProductDetail({ product }: { product: DetailProduct }) {
           )}
         </div>
 
-        {/* Model selector */}
-        {product.variants.length > 0 && (
+        {/* Model selector — only shown when there's an actual choice to make */}
+        {product.variants.length > 1 && (
           <div className="mt-6">
-            <div className="mb-2 text-sm font-semibold text-ink">
-              Model{product.variants.length > 1 ? "s" : ""}
-            </div>
+            <div className="mb-2 text-sm font-semibold text-ink">Models</div>
             <div className="flex flex-wrap gap-2">
               {product.variants.map((v) => {
                 const isSel = v.id === selectedId;
@@ -121,15 +119,18 @@ export function ProductDetail({ product }: { product: DetailProduct }) {
                         : "border-line bg-white text-ink hover:border-brand"
                     } ${!v.inStock ? "cursor-not-allowed opacity-50 line-through" : ""}`}
                   >
-                    {v.name}
+                    {v.name || "Standard"}
                   </button>
                 );
               })}
             </div>
-            {selected && !selected.inStock && (
-              <p className="mt-2 text-sm font-medium text-red-600">This model is out of stock.</p>
-            )}
           </div>
+        )}
+
+        {selected && !selected.inStock && (
+          <p className="mt-4 text-sm font-medium text-red-600">
+            {product.variants.length > 1 ? "This model is out of stock." : "Out of stock."}
+          </p>
         )}
 
         {/* Quantity + add */}

@@ -43,7 +43,8 @@ export default async function AdminOrderDetail({
               {order.items.map((it) => (
                 <li key={it.id} className="flex justify-between gap-2 py-2 text-sm">
                   <span className="text-ink">
-                    {it.productName} <span className="text-muted">({it.variantName})</span>
+                    {it.productName}
+                    {it.variantName && <span className="text-muted"> ({it.variantName})</span>}
                     <span className="text-muted"> × {it.qty}</span>
                   </span>
                   <span className="font-medium text-ink">{formatLKR(it.lineTotal)}</span>

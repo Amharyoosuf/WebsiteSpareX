@@ -54,14 +54,16 @@ export async function importCsv(formData: FormData): Promise<ImportResult> {
     skipEmptyLines: true,
   });
 
+  // Model is optional (a row with no model = a simple one-price product);
+  // a row needs at least a product name and a price.
   let rows = (parsed.data || [])
     .map(normalizeRow)
-    .filter((r) => r.main_product && r.model);
+    .filter((r) => r.main_product && r.price);
 
   if (rows.length === 0) {
     return {
       ok: false,
-      error: "No valid rows found. Each row needs at least a product name and a model.",
+      error: "No valid rows found. Each row needs at least a product name and a price.",
     };
   }
 

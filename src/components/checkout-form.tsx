@@ -163,7 +163,8 @@ export function CheckoutForm({
             {items.map((it) => (
               <li key={it.variantId} className="flex justify-between gap-2">
                 <span className="text-muted">
-                  {it.productName} <span className="text-gray-400">({it.variantName})</span> × {it.qty}
+                  {it.productName}
+                  {it.variantName && <span className="text-gray-400"> ({it.variantName})</span>} × {it.qty}
                 </span>
                 <span className="font-medium text-ink">{formatLKR(it.unitPrice * it.qty)}</span>
               </li>

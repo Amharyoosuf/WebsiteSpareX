@@ -44,7 +44,8 @@ export default async function OrderPage({
             {order.items.map((it) => (
               <li key={it.id} className="flex justify-between gap-2 py-2 text-sm">
                 <span className="text-ink">
-                  {it.productName} <span className="text-muted">({it.variantName})</span> × {it.qty}
+                  {it.productName}
+                  {it.variantName && <span className="text-muted"> ({it.variantName})</span>} × {it.qty}
                 </span>
                 <span className="font-medium text-ink">{formatLKR(it.lineTotal)}</span>
               </li>

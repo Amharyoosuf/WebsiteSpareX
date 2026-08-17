@@ -73,9 +73,11 @@ export async function saveProduct(formData: FormData) {
   } catch {
     variants = [];
   }
-  variants = variants.filter((v) => v && String(v.name).trim() !== "");
+  // A variant just needs a price; the model name is optional (a single
+  // nameless variant = a simple one-price product with no options).
+  variants = variants.filter((v) => v && Number(v.price) > 0);
   if (variants.length === 0) {
-    throw new Error("Add at least one model (e.g. 60W) with a price.");
+    throw new Error("Enter a price for the product.");
   }
 
   // Resolve per-variant image uploads.
