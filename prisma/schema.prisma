@@ -106,7 +106,7 @@ model OrderItem {
 // Single-row business settings.
 model Settings {
   id                String  @id @default("singleton")
-  shopName          String  @default("SpareX")
+  shopName          String  @default("Ceylon Spares")
   shopAddress       String  @default("")
   phone1            String  @default("")
   phone2            String  @default("")

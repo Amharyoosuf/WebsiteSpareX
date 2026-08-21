@@ -13,7 +13,7 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
   return (
     <CartProvider>
       <SiteHeader
-        shopName={settings.shopName || "SpareX"}
+        shopName={settings.shopName || "Ceylon Spares"}
         categories={categories.map((c) => ({ id: c.id, name: c.name, slug: c.slug }))}
       />
       <main className="min-h-[70vh]">{children}</main>

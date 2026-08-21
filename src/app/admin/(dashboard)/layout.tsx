@@ -20,7 +20,7 @@ export default async function AdminDashboardLayout({
         <aside className="border-b border-line bg-white md:min-h-screen md:w-60 md:border-b-0 md:border-r">
           <div className="flex items-center px-5 py-4">
             <Link href="/admin" className="text-lg font-bold text-ink">
-              SpareX <span className="text-sm font-medium text-muted">Admin</span>
+              Ceylon Spares <span className="text-sm font-medium text-muted">Admin</span>
             </Link>
           </div>
           <div className="px-3 pb-4">

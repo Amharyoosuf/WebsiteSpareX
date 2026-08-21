@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
     <div className="grid min-h-screen place-items-center bg-gray-50 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
-          <h1 className="text-xl font-bold text-ink">SpareX Admin</h1>
+          <h1 className="text-xl font-bold text-ink">Ceylon Spares Admin</h1>
           <p className="text-sm text-muted">Sign in to manage your shop.</p>
         </div>
         <form onSubmit={onSubmit} className="card p-6">

@@ -19,7 +19,7 @@ function siteUrl(): URL {
 
 export const metadata: Metadata = {
   metadataBase: siteUrl(),
-  title: { default: "SpareX — Spare Parts", template: "%s | SpareX" },
+  title: { default: "Ceylon Spares — Spare Parts", template: "%s | Ceylon Spares" },
   description:
     "Quality spare parts delivered across Sri Lanka. Fan motors, capacitors, pump parts and more.",
 };

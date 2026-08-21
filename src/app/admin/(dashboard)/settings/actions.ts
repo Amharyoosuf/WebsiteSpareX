@@ -15,7 +15,7 @@ export async function updateSettings(formData: FormData) {
   const newKey = str("openaiApiKey");
 
   const data: Record<string, unknown> = {
-    shopName: str("shopName") || "SpareX",
+    shopName: str("shopName") || "Ceylon Spares",
     shopAddress: str("shopAddress"),
     phone1: str("phone1"),
     phone2: str("phone2"),

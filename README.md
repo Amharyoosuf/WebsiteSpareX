@@ -1,4 +1,4 @@
-# SpareX
+# Ceylon Spares
 
 A simple, fast online shop for a spare-parts business, plus an easy admin back office.
 Customers browse and order as guests (no accounts). The owner manages products, models,
@@ -40,7 +40,7 @@ Open http://localhost:3000 for the shop and http://localhost:3000/admin for the 
 | `DATABASE_URL` | yes | `file:./dev.db` for SQLite (default). |
 | `ADMIN_PASSWORD` | yes | Password for the admin login. |
 | `SESSION_SECRET` | yes | Long random string used to sign the admin cookie. |
-| `NEXT_PUBLIC_SITE_URL` | recommended | Public URL, e.g. `https://sparex.lk` (for SEO/sitemap). |
+| `NEXT_PUBLIC_SITE_URL` | recommended | Public URL, e.g. `https://ceylonspares.lk` (for SEO/sitemap). |
 | `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL` | optional | Cloudflare R2 image storage. If unset, images are saved to `/public/uploads`. |
 
 The **OpenAI API key** is *not* an env var — the owner adds it in **Admin → Settings**.
