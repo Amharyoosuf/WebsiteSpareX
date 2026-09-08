@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { ProductDetail } from "@/components/product-detail";
+import { ProductViewTracker } from "@/components/tracker";
 import { priceSummary } from "@/lib/products";
 
 export const revalidate = 60;
@@ -72,6 +73,7 @@ export default async function ProductPage({
 
   return (
     <div className="container-page py-6">
+      <ProductViewTracker productId={product.id} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

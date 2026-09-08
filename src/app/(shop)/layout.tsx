@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
 import { CartProvider } from "@/components/cart";
 import { SiteHeader } from "@/components/site-header";
+import { PageTracker } from "@/components/tracker";
 
 export default async function ShopLayout({ children }: { children: React.ReactNode }) {
   const [settings, categories] = await Promise.all([
@@ -12,6 +13,7 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
 
   return (
     <CartProvider>
+      <PageTracker />
       <SiteHeader
         shopName={settings.shopName || "Ceylon Spares"}
         categories={categories.map((c) => ({ id: c.id, name: c.name, slug: c.slug }))}

@@ -118,3 +118,20 @@ model Settings {
   deliveryFee       Int     @default(500)
   openaiApiKey      String  @default("")
 }
+
+// Lightweight first-party analytics. One row per tracked event.
+model AnalyticsEvent {
+  id           String   @id @default(cuid())
+  type         String // "view" | "product_view" | "add_to_cart"
+  path         String   @default("")
+  source       String   @default("Direct") // Direct | Google | Facebook | Internal | <host> ...
+  referrerHost String   @default("")
+  productId    String?
+  visitorId    String?
+  createdAt    DateTime @default(now())
+
+  @@index([type])
+  @@index([createdAt])
+  @@index([productId])
+  @@index([source])
+}

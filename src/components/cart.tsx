@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { trackEvent } from "./tracker";
 
 export type CartItem = {
   productId: string;
@@ -56,7 +57,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       count,
       subtotal,
       ready,
-      add: (item, qty = 1) =>
+      add: (item, qty = 1) => {
+        trackEvent("add_to_cart", { productId: item.productId });
         setItems((prev) => {
           const idx = prev.findIndex((p) => p.variantId === item.variantId);
           if (idx >= 0) {
@@ -65,7 +67,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             return next;
           }
           return [...prev, { ...item, qty }];
-        }),
+        });
+      },
       setQty: (variantId, qty) =>
         setItems((prev) =>
           prev
