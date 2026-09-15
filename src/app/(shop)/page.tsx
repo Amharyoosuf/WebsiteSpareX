@@ -41,7 +41,10 @@ export default async function HomePage() {
       {onOffer.length > 0 && (
         <section className="mb-10">
           <div className="mb-4 flex items-end justify-between">
-            <h2 className="text-lg font-bold text-ink sm:text-xl">On Offer</h2>
+            <h2 className="flex items-center gap-2.5 text-lg font-bold text-ink sm:text-xl">
+              <span className="h-5 w-1.5 rounded-full bg-gradient-to-b from-offer to-amber-600" />
+              On Offer
+            </h2>
             <span className="text-sm text-muted">Best deals right now</span>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
@@ -55,7 +58,10 @@ export default async function HomePage() {
       {/* Random product mix */}
       <section>
         <div className="mb-4 flex items-end justify-between">
-          <h2 className="text-lg font-bold text-ink sm:text-xl">Explore Products</h2>
+          <h2 className="flex items-center gap-2.5 text-lg font-bold text-ink sm:text-xl">
+            <span className="h-5 w-1.5 rounded-full bg-gradient-to-b from-brand to-brand-dark" />
+            Explore Products
+          </h2>
         </div>
         {tiles.length === 0 ? (
           <div className="card p-10 text-center text-muted">

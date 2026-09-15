@@ -5,8 +5,10 @@ type HeroProduct = { slug: string; name: string; image: string };
 export function Hero({ products }: { products: HeroProduct[] }) {
   const tiles = products.slice(0, 6);
   return (
-    <section className="relative mb-8 overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-brand-light via-white to-sky-mid">
-      <div className="grid items-center gap-6 p-6 sm:p-8 lg:grid-cols-2 lg:gap-10 lg:p-12">
+    <section className="relative mb-8 overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-[#d8e6ff] via-[#eef5ff] to-[#cfe0ff]">
+      <div className="pointer-events-none absolute -right-16 -top-24 h-64 w-64 rounded-full bg-brand/25 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -left-10 h-56 w-56 rounded-full bg-sky-mid/50 blur-3xl" />
+      <div className="relative grid items-center gap-6 p-6 sm:p-8 lg:grid-cols-2 lg:gap-10 lg:p-12">
         {/* Text + actions */}
         <div>
           <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl">
