@@ -1,8 +1,10 @@
 import { prisma } from "@/lib/db";
 import { ProductCard } from "@/components/product-card";
+import { Hero } from "@/components/hero";
+import { shuffle } from "@/lib/util";
 
-// Rendered on demand (SQLite queries are instant) so the production build
-// never needs a database connection.
+// Rendered on demand so products can be rotated randomly on every visit
+// (nothing is fixed by "most recently added").
 export const dynamic = "force-dynamic";
 
 const productSelect = {
@@ -15,31 +17,27 @@ const productSelect = {
 };
 
 export default async function HomePage() {
-  const [onOffer, all] = await Promise.all([
-    prisma.product.findMany({
-      where: { isOnOffer: true, isHidden: false },
-      orderBy: { createdAt: "desc" },
-      take: 8,
-      select: productSelect,
-    }),
-    prisma.product.findMany({
-      where: { isHidden: false },
-      orderBy: { createdAt: "desc" },
-      take: 48,
-      select: productSelect,
-    }),
-  ]);
+  // One query, then shuffle in memory so the hero, offers and tiles all rotate.
+  const products = await prisma.product.findMany({
+    where: { isHidden: false },
+    select: productSelect,
+    take: 300,
+  });
+  const shuffled = shuffle(products);
+
+  const heroProducts = shuffled
+    .filter((p) => p.images[0]?.url)
+    .slice(0, 6)
+    .map((p) => ({ slug: p.slug, name: p.name, image: p.images[0]!.url }));
+
+  const onOffer = shuffled.filter((p) => p.isOnOffer).slice(0, 8);
+  const tiles = shuffled.slice(0, 30);
 
   return (
     <div className="container-page py-6">
-      {/* Hero — heading only */}
-      <section className="mb-8 overflow-hidden rounded-xl border border-line bg-gradient-to-br from-brand-light to-white p-6 sm:p-10">
-        <h1 className="max-w-3xl text-2xl font-extrabold tracking-tight text-ink sm:text-4xl">
-          Genuine spare parts, delivered to your door.
-        </h1>
-      </section>
+      <Hero products={heroProducts} />
 
-      {/* On Offer */}
+      {/* On Offer — only shown when something is actually on offer */}
       {onOffer.length > 0 && (
         <section className="mb-10">
           <div className="mb-4 flex items-end justify-between">
@@ -54,18 +52,18 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* All products */}
+      {/* Random product mix */}
       <section>
         <div className="mb-4 flex items-end justify-between">
-          <h2 className="text-lg font-bold text-ink sm:text-xl">All Products</h2>
+          <h2 className="text-lg font-bold text-ink sm:text-xl">Explore Products</h2>
         </div>
-        {all.length === 0 ? (
+        {tiles.length === 0 ? (
           <div className="card p-10 text-center text-muted">
             No products yet. Add some from the admin panel.
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-            {all.map((p) => (
+            {tiles.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>

@@ -27,3 +27,14 @@ export function orderNumber(seq: number): string {
   const dd = String(d.getDate()).padStart(2, "0");
   return `CS-${yy}${mm}${dd}-${String(seq).padStart(4, "0")}`;
 }
+
+// Fisher–Yates shuffle (returns a new array). Used to rotate products randomly
+// so nothing is fixed by "most recently added".
+export function shuffle<T>(input: readonly T[]): T[] {
+  const a = [...input];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}

@@ -30,7 +30,7 @@ export function ProductCard({ product }: { product: CardProduct }) {
         />
         <div className="absolute left-2 top-2 flex flex-col gap-1">
           {product.isOnOffer && (
-            <span className="badge bg-brand text-white shadow-sm">On Offer</span>
+            <span className="badge bg-offer text-white shadow-sm">On Offer</span>
           )}
           {onSale && <span className="badge bg-red-600 text-white shadow-sm">Sale</span>}
         </div>

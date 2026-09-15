@@ -5,15 +5,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Clean, professional accent — deep blue for a spare-parts shop.
+        // Subtle, professional light-blue palette for a spare-parts shop.
         brand: {
-          DEFAULT: "#1e5eff",
-          dark: "#1544c7",
-          light: "#eef3ff",
+          DEFAULT: "#2f6fed", // readable blue for buttons/links
+          dark: "#215ad0",
+          light: "#eef4ff", // very light blue tint (hover/active/wash)
         },
-        ink: "#111827",
-        muted: "#6b7280",
-        line: "#e8eaed",
+        sky: {
+          soft: "#f2f7ff", // faint blue-tinted surface
+          mid: "#e3edff",
+        },
+        offer: "#f59e0b", // warm amber, used only for sale/deal accents
+        ink: "#0f172a",
+        muted: "#64748b",
+        line: "#e6edf8",
       },
       fontFamily: {
         sans: [
