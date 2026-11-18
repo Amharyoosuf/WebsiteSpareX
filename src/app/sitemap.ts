@@ -10,7 +10,11 @@ function baseUrl(): string {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = baseUrl();
-  const entries: MetadataRoute.Sitemap = [{ url: base, changeFrequency: "daily", priority: 1 }];
+  const entries: MetadataRoute.Sitemap = [
+    { url: base, changeFrequency: "daily", priority: 1 },
+    { url: `${base}/products`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${base}/categories`, changeFrequency: "weekly", priority: 0.6 },
+  ];
 
   try {
     const [products, categories] = await Promise.all([

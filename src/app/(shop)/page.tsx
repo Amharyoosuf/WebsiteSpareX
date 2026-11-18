@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/db";
+import { getSettings } from "@/lib/settings";
 import { ProductCard } from "@/components/product-card";
 import { Hero } from "@/components/hero";
 import { shuffle } from "@/lib/util";
+
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3005").replace(/\/$/, "");
 
 // Rendered on demand so products can be rotated randomly on every visit
 // (nothing is fixed by "most recently added").
@@ -33,8 +36,44 @@ export default async function HomePage() {
   const onOffer = shuffled.filter((p) => p.isOnOffer).slice(0, 8);
   const tiles = shuffled.slice(0, 30);
 
+  // Business + website structured data so AI/search engines understand the shop.
+  const settings = await getSettings();
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: settings.shopName,
+      url: SITE_URL,
+      potentialAction: {
+        "@type": "SearchAction",
+        target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/search?q={search_term_string}` },
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      name: settings.shopName,
+      url: SITE_URL,
+      image: `${SITE_URL}/placeholder.svg`,
+      description:
+        "Online spare-parts shop in Sri Lanka — fan motors, capacitors, pump parts, electrical spares and more, delivered island-wide.",
+      telephone: settings.phone1 || "+94783811311",
+      email: settings.email || undefined,
+      priceRange: "Rs",
+      areaServed: "Sri Lanka",
+      address: settings.shopAddress
+        ? { "@type": "PostalAddress", streetAddress: settings.shopAddress, addressCountry: "LK" }
+        : undefined,
+    },
+  ];
+
   return (
     <div className="container-page py-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Hero products={heroProducts} />
 
       {/* On Offer — only shown when something is actually on offer */}
